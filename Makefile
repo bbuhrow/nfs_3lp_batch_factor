@@ -3,12 +3,18 @@
 # Makefile
 # ============================================================================
 CC = gcc
-CUDA_PATH = /usr/local/cuda-12
+TOOLKIT_VERSION=13
+CUDA_PATH = /usr/local/cuda-13
 NVCC = $(CUDA_PATH)/bin/nvcc
-CFLAGS = -I$(CUDA_PATH)/include -I../gmp-install/6.2.0-gcc/include  -I. -Iytools -Iysieve -Iaprcl -O2 -DHAVE_CUDA -fno-common -mbmi2
-LDFLAGS = -L$(CUDA_PATH)/lib64 -L../gmp-install/6.2.0/lib -Lysieve -Lytools -Laprcl -lcudart -lgmp -lm -ldl -lcuda -pthread
-SM = 80
+CUSTOM_GMP_INC = ../gmp-install/6.2.0-gcc/include 
+CUSTOM_GMP_LIB = ../gmp-install/6.2.0-gcc/lib 
+SM = 90
 
+CFLAGS = -I$(CUDA_PATH)/include  -I$(CUSTOM_GMP_INC) \
+	-I. -Iytools -Iysieve -Iaprcl -O2 -DHAVE_CUDA -DTOOLKIT_VERSION=$(TOOLKIT_VERSION) \
+	-fno-common -mbmi2
+LDFLAGS = -L$(CUDA_PATH)/lib64 -L$(CUSTOM_GMP_LIB) -Lysieve -Lytools \
+	-Laprcl -lcudart -lgmp -lm -ldl -lcuda -pthread
 
 ifeq ($(ICELAKE),1)
 	CFLAGS += -DUSE_BMI2 -DUSE_AVX2 -DUSE_AVX512F -DUSE_AVX512BW -DSKYLAKEX -DIFMA -march=icelake-client

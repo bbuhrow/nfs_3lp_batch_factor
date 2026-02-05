@@ -7,7 +7,11 @@
 
 #ifdef HAVE_CUDA
 
-#define toolkit_version 12
+#ifndef TOOLKIT_VERSION
+#define toolkit_version 13
+#else
+#define toolkit_version TOOLKIT_VERSION
+#endif
 
 #define MAX_RESIDUE_WORDS 3
 
